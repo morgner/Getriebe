@@ -1,31 +1,28 @@
 /*
+3-RaederKoppelGetriebe
 
+Autor:		Manfred Morgner
+Lizenz:		Creative Commons - Attribution, Non Commercial, Share Alike
+----------------
 1. stirnrad(modul, zahnzahl, hoehe, bohrung, eingriffswinkel = 20, schraegungswinkel = 0)
 
 Autor:		Dr Jörg Janssen
-Stand:		20. Juni 2016
-Version:	1.3
 Lizenz:		Creative Commons - Attribution, Non Commercial, Share Alike
 
-Erlaubte Module nach DIN 780:
-0.05 0.06 0.08 0.10 0.12 0.16
-0.20 0.25 0.3  0.4  0.5  0.6
-0.7  0.8  0.9  1    1.25 1.5
-2    2.5  3    4    5    6
-8    10   12   16   20   25
-32   40   50   60
+    Erlaubte Module nach DIN 780:
+    0.05 0.06 0.08 0.10 0.12 0.16
+    0.20 0.25 0.3  0.4  0.5  0.6
+    0.7  0.8  0.9  1    1.25 1.5
+    2    2.5  3    4    5    6
+    8    10   12   16   20   25
+    32   40   50   60
 
 */
 /*
-Cosinussatz:
-a = √ (b2 + c2 - 2 b c cos α)
+    Cosinussatz:            a = √ (b2 + c2 - 2 b c cos α)
+    Aufgelöst nach Winkeln: α = arccos [(-a2 + b2 + c2)/(2 b c)]
 
-Aufgelöst nach Winkeln:
-α = arccos [(-a2 + b2 + c2)/(2 b c)]
-
-Sinussatz:
-a / sin α = b / sin β = c / sin γ
-
+    Sinussatz:              a / sin α = b / sin β = c / sin γ
 */
 
 use <Getriebe.scad>
