@@ -52,10 +52,13 @@ w1=acos((-pow(bl,2) + pow(e,2) + pow(cl,2))/(2*e*cl));
 w2=asin(y/e);
 w3=acos((-pow(cl,2) + pow(e,2) + pow(bl,2))/(2*e*bl));
 
+ 
 translate([ 0, 0,  0])
     {
     Riegel4(gl=gl);
     }
+
+
 
 
 wa=360*$t;
@@ -68,13 +71,15 @@ translate([gl, 0, gh])
             rotate([0, 0, 0*-360*$t])
                 {
                 color("blue",  alfa)
-                    stirnrad(M, za, gh, gi+.7, ZG, 0); 
+                    stirnrad(M, za, gh, gi+.7, ZG, 0)
+                    ; 
 //              color("white", alfa) 
 //                  translate([al, 0, gh])      
 //                      cylinder(d=gi/2, h=5*gh, center=true)
 //                      ; 
                 }
         }
+
 
 wb=-w3+w2;
 
@@ -87,8 +92,8 @@ translate([0, 0, gh])
             translate([0,0,gh])
                 rotate([0, 0, zc/zb*(za/zc*(wa-wc)+wb-wc)+12])
                     color("green", alfa)
-                
-                        stirnrad(M, zb, gh, gi+.7, ZG, 0);
+                        stirnrad(M, zb, gh, gi+.7, ZG, 0)
+                        ;
 
             translate([ 0, 0,  2*gh+2])
                 cylinder(d=gi+4, h=gh, center=true)
@@ -117,7 +122,8 @@ wc=+w1+w2;
 translate([gl+x, y, 3*gh])
     rotate([0, 180, +w1+w2])
         {
-        translate([0, 0, -gh]) Riegel3(gl=cl);
+        translate([0, 0, -gh])
+            Riegel3(gl=cl);
 
         translate([cl,0,0])
             rotate([0, 0, za/zc*(wa-wc)])
@@ -193,6 +199,7 @@ module Riegel2(gl=100) {
             }
         }
     }
+
 }
 
 
@@ -214,23 +221,32 @@ module Riegel3(gl=100) {
         }
     }
     module m1(f=0) {
-        translate([0, 0, gh*1.5])
-            cylinder(d=gi, h=gh+gh,   center=true);
-        translate([0, 0, gh*2+3])
-            cylinder(d1=gi+2, d2=gi+1, h=2,   center=true);
+        translate([0, 0, gh])
+            cylinder(d=gi, h=gh+gh+gh,   center=true);
+        translate([0, 0, gh*2+3.5])
+            cylinder(d1=gi+2, d2=gi+1, h=3,   center=true);
     }
     module m2(f=0) {
-        translate([0, 0, gh+d/2+gh]) {
-            cube([3, gd, gh+d], center=true);
-            cube([gd, 3, gh+d], center=true);
-            cylinder(d1=gi-5, d2=gi-2, h=gh+d,   center=true);
+       translate([0, 0, gh+d+gh/2]) {
+             rotate([90])
+             hull() {
+                cylinder(d=3, h=gd, center=true);
+                translate([0, gh, 0])
+                    cylinder(d=3, h=gd, center=true);
+                }
+             rotate([90,0,90])
+             hull() {
+                cylinder(d=3, h=gd, center=true);
+                translate([0, gh, 0])
+                    cylinder(d=3, h=gd, center=true);
+                }
+                cylinder(d1=gi-5, d2=gi-2, h=gh+gh-d, center=true);
         }
-       // translate([10, 0, 0]) cube([20, gd, gh*5+d], center=true);
-       // cylinder(d=gi-5, h=gh+1,   center=true);
     }
 }
+
 module Riegel4(gl=100) {
-    color("cyan", 1.75)
+    color("cyan", 1)
     translate([0, 0, gh/2]) {
         difference() {
             union() {
@@ -247,16 +263,29 @@ module Riegel4(gl=100) {
         }
     }
     module m1(f=0) {
-        translate([0, 0, gh+gh/2*f])
-            cylinder(d=gi, h=gh+f*gh,   center=true);
-        translate([0, 0, gh+f*gh+3])
-            cylinder(d1=gi+2, d2=gi+1, h=2,   center=true);
+        translate([0, 0, gh/2+gh/2*f])
+            cylinder(d=gi, h=2*gh+f*gh, center=true);
+        translate([0, 0, gh+f*gh+3.5])
+            cylinder(d1=gi+2, d2=gi+1, h=3, center=true);
     }
     module m2(f=0) {
-        translate([0, 0, gh+d/2+f*gh]) {
-            cube([3, gd, gh+d], center=true);
-            cube([gd, 3, gh+d], center=true);
-            cylinder(d1=gi-5, d2=gi-2, h=gh+d,   center=true);
+        translate([0, 0, gh/2+d/2+f*gh]) {
+        translate([0,0,0+1]) {
+             rotate([90])
+             hull() {
+                cylinder(d=3, h=gd, center=true);
+                translate([0, gh, 0])
+                    cylinder(d=3, h=gd, center=true);
+                }
+             rotate([90,0,90])
+             hull() {
+                cylinder(d=3, h=gd, center=true);
+                translate([0, gh, 0])
+                    cylinder(d=3, h=gd, center=true);
+                }
+        }
+        translate([0,0,1])
+            cylinder(d1=gi-5, d2=gi-2, h=gh+gh-d, center=true);
         }
        // translate([10, 0, 0]) cube([20, gd, gh*5+d], center=true);
        // cylinder(d=gi-5, h=gh+1,   center=true);
