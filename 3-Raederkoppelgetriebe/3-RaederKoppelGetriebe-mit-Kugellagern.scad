@@ -39,7 +39,7 @@ gh= 10;         // lever height
 gl=120;         // ground lever length
 al= 30;         // A-lever length
 bl= 80;         // B-lever length
-cl= 80;         // C-lever length
+cl= 90;         // C-lever length
 
 explosion=gh*0; // explosion distance ( *0 = not exploded )
 
@@ -51,6 +51,7 @@ za=20/M*4;      // gear diameter at point A'
 zc=cl/2/M*4-za; // gear diameter at point B'
 zb=bl/2/M*4-zc; // gear diameter at point B
 
+C=true;         // if true, lever C appears
 ob=12;          // gear angle offset at point B'
 oc= 6;          // gear angle offset at point C
 
@@ -147,7 +148,7 @@ translate([gl+x, y, 3*gh])
         {
         translate([0, 0, -gh])
             translate([ 0, 0, -1*explosion]) 
-                Riegel1(gl=cl);
+if ( C )        Riegel1(gl=cl);
 //          translate([ 0, 0, 2*gh]) bearing();
     
         // B' gear
