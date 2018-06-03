@@ -27,81 +27,98 @@ Lizenz:		Creative Commons - Attribution, Non Commercial, Share Alike
 
 use <Getriebe.scad>
 
-$fn=164;
+$fn=164;        // faces of a cylinder
 
 d=1;
-alfa=1;
+alfa=1;         // make certain things transparent
 
-gd= 30; gi= 20; gh= 10;
-gl=120;
-al= 30;
-bl= 80;
-cl= 90;
+gd= 30;         // lever diameter
+gi= 20;         // link inner diameter
+gh= 10;         // lever height
 
-M=4;
-ZG=19.5;
-za=20/M*4;      // am Gehäusepunkt A
-zc=cl/2/M*4-za; // an der Koppel
-zb=bl/2/M*4-zc; // am Gehäusepunkt B
+gl=120;         // ground lever length
+al= 25;         // A-lever length
+bl= 80;         // B-lever length
+cl= 90;         // C-lever length
 
-x=al*cos(360*$t);
-y=al*sin(360*$t);
+explosion=gh*0; // explosion distance ( *0 = not exploded )
+eps=.001;
+
+M=4;            // modulo
+ZG=19.5;        // cog size
+
+za=22/M*4;      // gear diameter at point A'
+zc=cl/2/M*4-za; // gear diameter at point B'
+zb=bl/2/M*4-zc; // gear diameter at point B
+
+C=true;         // if true, lever C appears
+ob=10;          // gear angle offset at point B'
+oc= 0;          // gear angle offset at point C
+
+wa=360*$t;      // A-lever angle (if animated)
+x=al*cos(wa);   // x-position of point A'
+y=al*sin(wa);   // y-position of point A'
+
 e=sqrt(pow(x+gl, 2) + pow(y, 2));
 
 w1=acos((-pow(bl,2) + pow(e,2) + pow(cl,2))/(2*e*cl));
 w2=asin(y/e);
 w3=acos((-pow(cl,2) + pow(e,2) + pow(bl,2))/(2*e*bl));
 
- 
+// ground lever
 translate([ 0, 0,  0])
     {
-    Riegel4(gl=gl);
+    translate([ 0, 0, -6*explosion])
+        Riegel4(gl=gl);
     }
 
 
-
-
-wa=360*$t;
-
+// A-Lever
 translate([gl, 0, gh])
-    rotate([0, 0, 360*$t+0]) 
-        {
-        Riegel1(gl=al);
-        translate([al, 0, gh])
-            rotate([0, 0, 0*-360*$t])
-                {
-                color("blue",  alfa)
-                    stirnrad(M, za, gh, gi+.7, ZG, 0)
-                    ; 
-//              color("white", alfa) 
-//                  translate([al, 0, gh])      
-//                      cylinder(d=gi/2, h=5*gh, center=true)
-//                      ; 
-                }
-        }
+    rotate([0, 0, 360*$t+0])
+        translate([ 0, 0, -2*explosion])
+            {
+//          difference(){
+                translate([0,0,eps])
+                    Riegel1(gl=al, p=false)
+                ;
+// translate([0,0,-10]) cube([40,40,40]);}
+            // A' gear
+            translate([al, 0, gh])
+                rotate([0, 0, 0*-360*$t])
+                    {
+                    color("blue",  alfa)
+                        stirnrad(M, za, gh, gi+.7, ZG, 0)
+                        ; 
+//                    color("white", alfa) 
+//                        translate([al, 0, gh])      
+//                            cylinder(d=gi/2, h=5*gh, center=true)
+//                            ; 
+                    }
+            }
 
 
-wb=-w3+w2;
+wb=-w3+w2; // B-Lever angle
 
+// B-Lever
 translate([0, 0, gh])
     rotate([0, 0, -w3+w2])
-        {
-        Riegel1(gl=bl);
-        difference()
+        translate([ 0, 0, -3*explosion]) 
             {
-            translate([0,0,gh])
-                rotate([0, 0, zc/zb*(za/zc*(wa-wc)+wb-wc)+12])
-                    color("green", alfa)
-                        stirnrad(M, zb, gh, gi+.7, ZG, 0)
-                        ;
-
-            translate([ 0, 0,  2*gh+2])
-                cylinder(d=gi+4, h=gh, center=true)
-                ;
+            Riegel1(gl=bl);
+            translate([ 0, 0, 1*explosion]) 
+            difference()
+                {
+                translate([0,0,gh])
+                    rotate([0, 0, zc/zb*(za/zc*(wa-wc)+wb-wc)+ob])
+                        color("green", alfa)
+                            stirnrad(M, zb, gh, gi+.7, ZG, 0);
+                translate([ 0, 0,  2*gh+2])
+                    cylinder(d=gi+4, h=gh, center=true);
+                }
             }
-        }
 
-//// demo part
+//// demo part (for demonstration of in-out-relation)
 //translate([0, 70, 2*gh])
 //    rotate([0, 0, -wb/za*zb]) 
 //        {
@@ -117,16 +134,20 @@ translate([0, 0, gh])
 //        }
 
 
-wc=+w1+w2;
+wc=+w1+w2; // C-Lever angle
 
+// C-Lever
 translate([gl+x, y, 3*gh])
     rotate([0, 180, +w1+w2])
         {
         translate([0, 0, -gh])
-            Riegel3(gl=cl);
+            translate([ 0, 0, -3*explosion])
+if ( C )        Riegel3(gl=cl)
+            ;
 
+        // B' gear
         translate([cl,0,0])
-            rotate([0, 0, za/zc*(wa-wc)])
+            rotate([0, 0, za/zc*(wa-wc)+oc])
                 color("RosyBrown", alfa)
                     stirnrad(M, zc, gh, gi+.7, ZG, 0)
                     ;
@@ -134,7 +155,7 @@ translate([gl+x, y, 3*gh])
 
 di=8;
 
-module Riegel1(gl=100) {
+module Riegel1(gl=100, p=true) {
     color("royalblue", .75)
     translate([0, 0, gh/2]) { 
         difference() {
@@ -143,20 +164,23 @@ module Riegel1(gl=100) {
                 translate([gl, 0, 0])
                     cylinder(d=gd, h=gh, center=true);
                 }
-            cylinder(d=gi,   h=gh+1, center=true); 
+            cylinder(d=gi+.7, h=gh+1, center=true); 
 
             translate([gl, 0, 0])
-                cylinder(d=gi, h=gh+1, center=true);
+                cylinder(d=gi+.7, h=gh+1, center=true);
 
             translate([0, 0,  gh-3])
-                cylinder(d=gi+4, h=gh,   center=true);
-            translate([0, 0, -gh+3])
-                cylinder(d=gi+4, h=gh,   center=true);
+                cylinder(d=gi+4, h=gh, center=true);
 
-            translate([gl, 0,  gh-3])
-                cylinder(d=gi+4, h=gh,   center=true);
+            if ( p )
+                translate([0, 0, -gh+3])
+                    cylinder(d=gi+4, h=gh, center=true);
+
+            if ( p )
+                translate([gl, 0,  gh-3])
+                    cylinder(d=gi+4, h=gh, center=true);
             translate([gl, 0, -gh+3])
-                cylinder(d=gi+4, h=gh,   center=true);
+                cylinder(d=gi+4, h=gh, center=true);
             }
         }
     }

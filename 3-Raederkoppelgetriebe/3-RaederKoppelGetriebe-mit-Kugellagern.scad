@@ -51,6 +51,9 @@ za=20/M*4;      // gear diameter at point A'
 zc=cl/2/M*4-za; // gear diameter at point B'
 zb=bl/2/M*4-zc; // gear diameter at point B
 
+ob=12;          // gear angle offset at point B'
+oc= 6;          // gear angle offset at point C
+
 wa=360*$t;      // A-lever angle (if animated)
 x=al*cos(wa);   // x-position of point A'
 y=al*sin(wa);   // y-position of point A'
@@ -84,7 +87,6 @@ translate([gl, 0, gh])
                         translate([-al, 0, -gh])
                             Stab(d=ki, h=2*gh, center=true);
                         }
-
             color("white", alfa) 
                 translate([0, 0, gh*2]) 
                     translate([ 0, 0, -6*explosion]) 
@@ -106,7 +108,7 @@ translate([0, 0, gh])
             difference()
                 {
                 translate([0,0,gh])
-                    rotate([0, 0, zc/zb*(za/zc*(wa-wc)+wb-wc)+12])
+                    rotate([0, 0, zc/zb*(za/zc*(wa-wc)+wb-wc)+ob])
                     color("green", alfa)
                         {
                         stirnrad(M, zb, gh, gi, ZG, 0);
@@ -136,8 +138,8 @@ translate([0, 0, gh])
 //        }
 //    }
 
-// C-Lever angle
-wc=+w1+w2;
+
+wc=+w1+w2; // C-Lever angle
 
 // C-Lever
 translate([gl+x, y, 3*gh])
@@ -145,8 +147,8 @@ translate([gl+x, y, 3*gh])
         {
         translate([0, 0, -gh])
             translate([ 0, 0, -1*explosion]) 
-        Riegel1(gl=cl);
-//          translate([0, 0, 2*gh]) bearing();
+                Riegel1(gl=cl);
+//          translate([ 0, 0, 2*gh]) bearing();
     
         // B' gear
         translate([cl,0,0])
