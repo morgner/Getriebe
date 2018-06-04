@@ -78,11 +78,11 @@ translate([gl, 0, gh])
     rotate([0, 0, 360*$t+0])
         translate([ 0, 0, -2*explosion])
             {
-//          difference(){
+// difference(){
                 translate([0,0,eps])
                     Riegel1(gl=al, p=false)
                 ;
-// translate([0,0,-10]) cube([40,40,40]);}
+// translate([-10,0,-20]) cube([60,40,35]);}
             // A' gear
             translate([al, 0, gh])
                 rotate([0, 0, 0*-360*$t])
@@ -246,7 +246,7 @@ module Riegel3(gl=100) {
     }
     module m1(f=0) {
         translate([0, 0, gh])
-            cylinder(d=gi, h=gh+gh+gh,   center=true);
+            cylinder(d=gi-1, h=gh+gh+gh,   center=true);
         translate([0, 0, gh*2+3.5])
             cylinder(d1=gi+2, d2=gi+1, h=3,   center=true);
     }
@@ -288,7 +288,7 @@ module Riegel4(gl=100) {
     }
     module m1(f=0) {
         translate([0, 0, gh/2+gh/2*f])
-            cylinder(d=gi, h=2*gh+f*gh, center=true);
+            cylinder(d=gi-1, h=2*gh+f*gh, center=true);
         translate([0, 0, gh+f*gh+3.5])
             cylinder(d1=gi+2, d2=gi+1, h=3, center=true);
     }
