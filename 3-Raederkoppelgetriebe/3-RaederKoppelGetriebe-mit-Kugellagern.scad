@@ -37,12 +37,13 @@ gi= 20;         // link inner diameter
 gh= 10;         // lever height
 
 gl=120;         // ground lever length
-al= 30;         // A-lever length
+al= 40;         // A-lever length
 bl= 80;         // B-lever length
 cl= 90;         // C-lever length
 
 explosion=gh*0; // explosion distance ( *0 = not exploded )
-
+modelCut=false; // cuts the model open
+simple=false;   // alternative stirnrad presentation
 
 M=4;            // modulo
 ZG=19.5;        // cog size
@@ -65,6 +66,9 @@ w1=acos((-pow(bl,2) + pow(e,2) + pow(cl,2))/(2*e*cl));
 w2=asin(y/e);
 w3=acos((-pow(cl,2) + pow(e,2) + pow(bl,2))/(2*e*bl));
 
+
+difference(){
+    union(){
 // ground lever
 translate([ 0, 0,  0])
     {
@@ -84,7 +88,11 @@ translate([gl, 0, gh])
                     {
                     color("blue",  alfa)
                         {
-                        stirnrad(M, za, gh, ki, ZG, 0); 
+                        if (simple) difference() {
+                            cylinder(r=2*za, h=gh);
+                            cylinder(d=ki, h=4*gh, center=true);}
+                        else
+                            stirnrad(M, za, gh, ki, ZG, 0); 
                         translate([-al, 0, -gh])
                             Stab(d=ki, h=2*gh, center=true);
                         }
@@ -112,15 +120,18 @@ translate([0, 0, gh])
                     rotate([0, 0, zc/zb*(za/zc*(wa-wc)+wb-wc)+ob])
                     color("green", alfa)
                         {
-                        stirnrad(M, zb, gh, gi, ZG, 0);
+                        if (simple) difference() {
+                            cylinder(r=2*zb, h=gh);
+                            cylinder(d=ki, h=3*gh, center=true);}
+                        else
+                            stirnrad(M, zb, gh, ki, ZG, 0);
                         translate([ 0, 0, -7*explosion])
                             Stab(d=ki, h=4*gh, center=true);
                         }
-                translate([0, 0, 1*gh+kh/2]) bearing(true);
+//                translate([0, 0, 1*gh+kh/2]) bearing(true);
                 }
-            translate([0, 0, 1*gh+kh/2]) bearing(false);
+//            translate([0, 0, 1*gh+kh/2]) bearing(false);
             }
-            
 
 
 //// output gear (for demonstration of in-out-relation)
@@ -156,11 +167,19 @@ if ( C )        Riegel1(gl=cl);
             rotate([0, 0, za/zc*(wa-wc)])
                 color("RosyBrown", alfa)
                     {
-                    stirnrad(M, zc, gh, ki, ZG, 0); 
+                    if (simple) difference() {
+                            cylinder(r=2*zc, h=gh);
+                            cylinder(d=ki, h=3*gh, center=true);}
+                    else
+                        stirnrad(M, zc, gh, ki, ZG, 0); 
                     translate([ 0, 0, 8*explosion])
                         Stab(d=ki, h=4*gh, center=true);
                     }
         }
+
+        } // union
+    if (modelCut) translate([ -40, 0, -10]) cube([240,100,90]);
+    } // difference
 
 
 
