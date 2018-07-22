@@ -35,7 +35,7 @@ alfa=1;         // make certain things transparent
 
 gd= 30;         // lever diameter
 gi= 20;         // link inner diameter
-gh= 10;         // lever height
+gh= 7.5;         // lever height
 
 gl=120;         // ground lever length
 al= 25;         // A-lever length
@@ -69,7 +69,7 @@ w3=acos((-pow(cl,2) + pow(e,2) + pow(bl,2))/(2*e*bl));
 // ground lever
 translate([ 0, 0,  0])
     {
-    translate([ 0, 0, -6*explosion]) color("cyan", 1) lever(h1=20);
+    translate([ 0, 0, -6*explosion]) color("cyan", 1) lever(gh=gh, h1=2*gh, h2=gh);
     }
 
 
@@ -80,7 +80,7 @@ translate([gl, 0, gh])
             {
 // difference(){
                 translate([0,0,eps])
-            color("royalblue", .75) lever(gl=al, h1=0, h2=0);
+            color("royalblue", .75) lever(gl=al, gh=gh, h1=0, h2=0);
                 ;
 // translate([-10,0,-20]) cube([60,40,35]);}
             // A' gear
@@ -98,23 +98,24 @@ translate([gl, 0, gh])
             }
 
 
-wb=-w3+w2; // B-Lever angle
+wb=-w3+w2; // B-Lever angle *********************************
 
 // B-Lever
 translate([0, 0, gh])
     rotate([0, 0, -w3+w2])
         translate([ 0, 0, -3*explosion]) 
             {
-            color("royalblue", .75) lever(gl=bl, h1=0, h2=0);
+            color("royalblue", .75) lever(gl=bl, gh=gh, h1=0, h2=0);
             translate([ 0, 0, 1*explosion]) 
             difference()
                 {
                 translate([0,0,gh])
                     rotate([0, 0, zc/zb*(za/zc*(wa-wc)+wb-wc)+ob])
                         color("green", alfa)
-                            stirnrad(M, zb, gh, gi+.7, ZG, 0);
-                translate([ 0, 0,  2*gh+2])
-                    cylinder(d=gi+4, h=gh, center=true);
+                            stirnrad(M, zb, gh, gi, ZG, 0);
+                translate([ 0, 0,  gh ]) bohrung( h=0 );
+
+                   // cylinder(d=gi+4, h=gh, center=true);
                 }
             }
 
@@ -144,7 +145,7 @@ translate([gl+x, y, 3*gh])
             translate([ 0, 0, -3*explosion])
                 color("magenta", 1.75)
 
-if ( C )        lever(gl=cl, h1=20, h2=20)
+if ( C )        lever(gl=cl, gh=gh, h1=2*gh, h2=2*gh)
             ;
 
         // B' gear
