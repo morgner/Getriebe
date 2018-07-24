@@ -12,6 +12,7 @@ Lizenz:		Creative Commons - Attribution, Non Commercial, Share Alike
 */
 
 use <Getriebe.scad>
+use <zapfen-2.scad>
 
  fn=180;        // faces of a cylinder
 $fn=fn;         // faces of a cylinder
@@ -31,8 +32,8 @@ zb=bl/2/M*4-zc; // gear diameter at point B
 modul=4;
 ZZ=55;
 zahnzahl=ZZ/modul*4;
-hoehe=8;
-bohrung=24;
+hoehe=7.5;
+bohrung=16;
 
 ////////////////// CONTROLS BEGIN
 
@@ -40,6 +41,8 @@ simple=false;   // alternative stirnrad presentation
 speichen=5;     // Anzahl Speichen in den Zahnrädern (ab 3)
 
 ////////////////// CONTROLS END
+
+gh=7.5;
 
 Gear(modul, zahnzahl, hoehe, bohrung);
 
@@ -53,7 +56,8 @@ module Gear(modul, zahnzahl, hoehe, bohrung, eingriffswinkel = 20, schraegungswi
         if (speichen > 2) {
             mr=4;
             $fn=40;
-            translate([0, 0, hoehe/2]) 
+            translate([0, 0, hoehe/2])
+            difference(){
             union(){ 
                 minkowski(){
                     union(){
@@ -71,11 +75,12 @@ module Gear(modul, zahnzahl, hoehe, bohrung, eingriffswinkel = 20, schraegungswi
                                 }
                             }
                         }
-                    $fn=23;
+                    $fn=31;
                     cylinder(r=mr, h=1, center=true);
                     }
                 }
             }
         }
     $fn=fn;
-    }
+    bohrung( gh=gh, h=0, gd= 30, gi=20 );
+    }}

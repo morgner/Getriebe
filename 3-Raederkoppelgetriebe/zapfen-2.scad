@@ -5,14 +5,14 @@ Autor:		Manfred Morgner
 Lizenz:		Creative Commons - Attribution, Non Commercial, Share Alike
 */
 
-$fn=90;
+$fn=73;
 eps=.001;
 
-gh=6;
-translate([ 0, 00,00]) lever(gl = 50, o=2, gh=gh, h1=0, h2=0);
-translate([85, 00,00]) lever(gl = 50, o=2, gh=gh, h1=0, h2=0);
-translate([ 0, 40,00]) lever(gl = 50, o=2, gh=gh, h1=gh, h2=2*gh); 
-translate([ 0,-40,00]) lever( gl=120, gd= 30, gi= 20, gh= gh );
+gh=7.5;
+translate([ 0, 00,00]) lever(gl = 40, o=2, gh=gh, h1=0,  h2=0);
+translate([85, 00,00]) lever(gl = 80, o=2, gh=gh, h1=0,  h2=0);
+translate([ 0, 40,00]) lever(gl = 90, o=2, gh=gh, h1=gh, h2=gh); 
+translate([ 0,-40,00]) lever(gl =120,      gh=gh, h1=gh, h2=gh, gd= 30, gi=20 );
 
 
 module bohrung(
@@ -58,30 +58,12 @@ module lever(   gl =120, // length of the lever, zapfen to zapfen
             translate([ 0,0,0]) cylinder(d=gd, h=gh);
             translate([gl,0,0]) cylinder(d=gd, h=gh);
             }
-        bohrung( gi = gi, gh = gh, h = h1, o = o, kh = kh, kx = kx, ko = ko );
-/*
-        if (h1 > 0)
-            translate([ 0,0,grdt]) cylinder(d=gi+2, h=gh-grdt+eps);
-        else
-            {
-            translate([ 0,0,0         -eps/2]) cylinder(d=gi,      h=gh+eps);
-            translate([ 0,0,0         -eps/2]) cylinder(d=gi+3*kx, h=(kh+ko)+eps);
-            translate([ 0,0,gh-(kh+ko)+eps/2]) cylinder(d=gi+3*kx, h=(kh+ko)+eps);
-            }
-//        translate([gl,0,grdt]) cylinder(d=gi+2, h=gh-grdt+eps);
-*/
+        translate([0,0,0])
+            bohrung( gi = gi, gh = gh, h = h1, o = o, kh = kh, kx = kx, ko = ko );
+
         translate([gl,0,0])
             bohrung( gi = gi, gh = gh, h = h2, o = o, kh = kh, kx = kx, ko = ko );
-/*
-        if (h2 > 0)
-            translate([gl,0,grdt]) cylinder(d=gi+2, h=gh-grdt+eps);
-        else
-            {
-            translate([gl,0,0         -eps/2]) cylinder(d=gi,      h=gh+eps);
-            translate([gl,0,0         -eps/2]) cylinder(d=gi+3*kx, h=(kh+ko)+eps);
-            translate([gl,0,gh-(kh+ko)+eps/2]) cylinder(d=gi+3*kx, h=(kh+ko)+eps);
-            }
-  */
+
       }
     if (h1 >0)
         color([1,.5,1]) translate([ 0,0,grdt+hb+eps]) zapfen(d=gi, h=gh-grdt+h1+eps, hb=hb);
