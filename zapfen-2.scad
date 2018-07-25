@@ -66,9 +66,9 @@ module lever(   gl =120, // length of the lever, zapfen to zapfen
 
       }
     if (h1 >0)
-        color([1,.5,1]) translate([ 0,0,grdt+hb+eps]) zapfen(d=gi, h=gh-grdt+h1+eps, hb=hb);
+        color([1,.5,1]) translate([ 0,0,grdt+hb+eps-o/2]) zapfen(d=gi, h=gh-grdt+h1+o/2+eps, hb=hb);
     if (h2 >0)
-        color([.5,1,1]) translate([gl,0,grdt+hb+eps]) zapfen(d=gi, h=gh-grdt+h2+eps, hb=hb);
+        color([.5,1,1]) translate([gl,0,grdt+hb+eps-o/2]) zapfen(d=gi, h=gh-grdt+h2+o/2+eps, hb=hb);
     }
 
 module zapfen(  d   = 20, // diameter

@@ -12,7 +12,7 @@ Lizenz:		Creative Commons - Attribution, Non Commercial, Share Alike
 */
 
 use <Getriebe.scad>
-use <zapfen-2.scad>
+use <../zapfen-2.scad>
 
  fn=180;        // faces of a cylinder
 $fn=fn;         // faces of a cylinder
@@ -30,10 +30,13 @@ zc=cl/2/M*4-za; // gear diameter at point B'
 zb=bl/2/M*4-zc; // gear diameter at point B
 
 modul=4;
-ZZ=55;
+ZZ=42;
 zahnzahl=ZZ/modul*4;
 hoehe=7.5;
 bohrung=16;
+
+// translate([-60,0,00]) lever(gl =120,      gh=gh, h1=gh, h2=gh, gd= 30, gi=20 );
+
 
 ////////////////// CONTROLS BEGIN
 

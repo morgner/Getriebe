@@ -26,7 +26,7 @@ Lizenz:		Creative Commons - Attribution, Non Commercial, Share Alike
 */
 
 use <Getriebe.scad>
-use <zapfen-2.scad>
+use <../zapfen-2.scad>
 
 $fn=164;        // faces of a cylinder
 
