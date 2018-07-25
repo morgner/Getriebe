@@ -1,0 +1,11 @@
+# kurve-N.mul:
+
+file kurve-N.mul
+file kurve-N.mul
+file kurve-N.mul
+file kurve-N.mul
+file kurve-N.mul
+...
+
+ffmpeg -f concat -i kurve-N.mul -c copy kurve-Nm.mp4
+
