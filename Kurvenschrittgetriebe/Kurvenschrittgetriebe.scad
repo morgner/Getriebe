@@ -39,8 +39,8 @@ $fn=16*f;
 
 
 rotate([0, 360*$t, 0]) Roller(120, // Bewegungsphase auf der Walze in Grad
-                               12, // Anzahl Schritte pro Umdrehung
-                              120, // Durchmesser des Mitnehmerkreises
+                               18, // Anzahl Schritte pro Umdrehung
+                              160, // Durchmesser des Mitnehmerkreises
                                12, // Durchmesser der Mitnehmer
                                15, // Höhe der Zapfen (h/2 im Eingriff)
                               100, // Durchmesser der Walze
@@ -93,7 +93,7 @@ module Roller(a=90, steps=6, dPinWheel=30, dPin=4, hPin=5, dRoller=40,  diRoller
         z=$t * 360/a;
         w=ustep*uberfn(z);
             rotate([0, -360*$t, 0]) {
-                color("cyan", .5)
+             //   color("cyan", .5)
                     Scheibe();
                     for (s=[180+0:ustep:180+360-ustep]) {
                         color(s==180 ? "DodgerBlue" : "lime", .75)
@@ -107,17 +107,22 @@ module Roller(a=90, steps=6, dPinWheel=30, dPin=4, hPin=5, dRoller=40,  diRoller
             }
         }
         module Scheibe() {
-            translate([xcs, 0, dd/2+h/4*3])
+            translate([xcs, 0, dd/2+h/4*3]){
                 difference() {
                     union() {
-                        cylinder(h=h/2, d=ds+d1, center=true);
+                    %    cylinder(h=h/2, d=ds+d1, center=true);
                         translate([0, 0, -h/2])
                             cylinder(h=h/2,   d=di*2,  center=true);
                     }
                 translate([0, 0, -h/2])
                     cylinder(h=h*2, d=di,    center=true);
-        }
-    }
+                }
+            translate([0, 0, -60])
+                cylinder(h=120, d=di,    center=true);
+           translate([0, 0, -2*(dd/2+h/4*3)])
+                cylinder(h=h/2, d=ds+d1, center=true);
+            }}
+            
     module Pin(factor=1, offset=0) {
         rotate([0, 90, 0])
             cylinder(d1=d1*factor, d2=d2*factor, h=h, center=true, $fn=6*f);
