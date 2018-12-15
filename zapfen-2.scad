@@ -9,10 +9,30 @@ $fn=73;
 eps=.001;
 
 gh=7.5;
-translate([ 0, 00,00]) lever(gl = 40, o=2, gh=gh, h1=0,  h2=0);
-translate([85, 00,00]) lever(gl = 80, o=2, gh=gh, h1=0,  h2=0);
-translate([ 0, 40,00]) lever(gl = 90, o=2, gh=gh, h1=gh, h2=gh); 
-translate([ 0,-40,00]) lever(gl =120,      gh=gh, h1=gh, h2=gh, gd= 30, gi=20 );
+
+
+difference(){
+    union(){
+        translate([ 0, 00,00]) 
+            lever(gl = 40, o=2, gh=gh, h1=0,  h2=0);
+        translate([ 0,-40,7.5]) 
+            color("lightblue")
+            lever(gl = 40, o=2, gh=gh, h1=0,  h2=0);
+        translate([85, 00,00]) 
+            lever(gl = 80, o=2, gh=gh, h1=0,  h2=0);
+        translate([ 0, 40,00]) 
+            lever(gl = 90, o=2, gh=gh, h1=gh, h2=gh); 
+        translate([ 0,-40,00]) 
+            lever(gl =120,      gh=gh, h1=gh, h2=gh, gd= 30, gi=20 );
+        }
+        translate([-15,-65,-.5])
+            rotate([0,0,45])
+                cube([30,40,16]);
+    }
+
+
+translate([ 0, 00,20]) lever(gl = 40, o=2, gh=gh, h1=0,  h2=0);
+translate([ 0, 40,20]) lever(gl = 60, o=2, gh=gh, h1=0,  h2=gh);
 
 
 module bohrung(
@@ -91,7 +111,8 @@ module zapfen(  d   = 20, // diameter
 // body
                 if (hb > 0) translate([0,0,-hb/2]) cylinder(d=d+2*bdo, h=hb, center=true);
 // Raste
-                translate([0,0,+h-kh/2-ko]) cylinder(d1=d+2*kx, d2=d, h=kh,    center=true);
+//                translate([0,0,+h-kh/2-ko]) cylinder(d1=d+2*kx, d2=d, h=kh,    center=true);
+                translate([0,0,+h-kh/2-ko+spiel/4]) cylinder(d1=d+2*kx, d2=d, h=kh-spiel/2,    center=true);
                 }
 
             translate([0,0, h/2+eps])     cube([2*kx+d+eps,c,h], center=true);
