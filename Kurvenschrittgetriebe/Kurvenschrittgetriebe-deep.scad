@@ -40,15 +40,15 @@ $fn=16*f;
 
 
 
-rotate([0, 360*$t, 0]) Roller(120, // Bewegungsphase auf der Walze in Grad
-                               13, // Anzahl Schritte pro Umdrehung
+rotate([0, 360*$t, 0]) Roller(180, // Bewegungsphase auf der Walze in Grad
+                               15, // Anzahl Schritte pro Umdrehung
                               160, // Durchmesser des Mitnehmerkreises
                                16, // Durchmesser der Mitnehmer
                                 8, // Innendurchmesser Mitnehmer Lager
                                15, // Höhe der Zapfen (h/2 im Eingriff)
                               100, // Durchmesser der Walze
                                40, // Innenbohrung in Scheibe und Walze
-                             true);// Scheibe und Zapfen anzeigen
+                             false);// Scheibe und Zapfen anzeigen
 
 module Roller(a=90, steps=6, dPinWheel=30, dPin=4, dPinI, hPin=5, dRoller=40,  diRoller=10, sample=false) {
 
@@ -66,19 +66,34 @@ module Roller(a=90, steps=6, dPinWheel=30, dPin=4, dPinI, hPin=5, dRoller=40,  d
 
     xcs=ds/2-ds/2*(1-cos(ustep));
 
-    difference() {
-        translate([0, -hd/2, 0])
-            difference() {
-                translate([0, hd/2, 0])
-                    rotate([90, 0, 0])
-                        cylinder(d=dd, h=hd, center=true, $fn=18*f);
+//H1();
 
-                translate([0, hd/2, 0])
-                    rotate([90, 0, 0]) {
-                        cylinder(d=di, h=hd+1, center=true, $fn=6);
-                        cylinder(d=di*.9, h=hd+1, center=true, $fn=9*f);
-                }}
-        // curve function
+    rotate([90, 0, 0])
+        difference(){
+            color("red", .6)  cylinder(d=dd+.42, h=hd+.1, center=true, $fn=18*f);
+            color("gray") cylinder(d=dd, h=hd+.2, center=true, $fn=18*f);
+            }
+    difference() { 
+        H1(); 
+        K1(); }
+    
+    module H1(){
+        rotate([90, 0, 0]){
+/*
+            difference(){
+                color("red")  cylinder(d=dd+4, h=hd+.1, center=true, $fn=18*f);
+                color("gray") cylinder(d=dd+1, h=hd+.2, center=true, $fn=18*f);
+                }
+*/
+            difference(){
+                cylinder(d=dd, h=hd, center=true, $fn=18*f);
+                cylinder(d=di, h=hd+1, center=true, $fn=6);
+                cylinder(d=di*.9, h=hd+1, center=true, $fn=9*f);
+                }
+            }
+        }
+        
+    module K1(){
         for (rot=[0:res:360-res])
             for (s=[180-0:ustep:180+360-ustep]) if ((s>490) || (s<200)) {
                 z=rot/a;
@@ -87,11 +102,19 @@ module Roller(a=90, steps=6, dPinWheel=30, dPin=4, dPinI, hPin=5, dRoller=40,  d
                     translate([xcs, 0, dd/2])
                         rotate([0, 0, s+w]) 
                             translate([ds/2, 0, 0])
-                                rotate([0, 90, 0])
-                                    Pin(s==180 ? factor(z) : 1, z<1&&s==180 ? 2.5:0, spiel=0.3);
+                                rotate([0, 90, 0]){
+                                    PinF(s==180 ? factor(z) : 1, z<1&&s==180 ? 2.5:0, spiel=0.3);
+/*
+
+        rotate([0, 90, 0])
+            cylinder(d1=d1*factor+spiel, d2=d2*factor+spiel, h=h*2, center=true, $fn=6*f);
+
+*/
+                                    }
                 }
             }
-        }
+    }
+
 
     // Abtrieb
     if (sample) {
@@ -114,9 +137,10 @@ module Roller(a=90, steps=6, dPinWheel=30, dPin=4, dPinI, hPin=5, dRoller=40,  d
                                                 rotate([0, 90, 0])
                                                     cylinder(d1=d, d2=dPinI+2.5, h=h-5, center=true, $fn=6*f);
 
-            translate([33, 0, 0])
+if (explosion == 0)
+            translate([5+explosion, 0, 0])
                rotate([0, -90, 0])
-#                cylinder(d=16, h=5, center=true);
+                cylinder(d=16, h=5, center=true);
 
                                             }
                                 }
@@ -145,7 +169,7 @@ module Roller(a=90, steps=6, dPinWheel=30, dPin=4, dPinI, hPin=5, dRoller=40,  d
            translate([0, 0, -2*(dd/2+h/4*3)])
                 cylinder(h=h/2, d=ds+d1, center=true);
             }}
-            
+
     module Pin(factor=1, offset=0, spiel=0) {
         rotate([0, 90, 0])
             cylinder(d1=d1*factor+spiel, d2=d2*factor+spiel, h=h, center=true, $fn=6*f);
@@ -156,6 +180,21 @@ module Roller(a=90, steps=6, dPinWheel=30, dPin=4, dPinI, hPin=5, dRoller=40,  d
             rotate([0, 90, 0])
                 cylinder(d1=d1*factor+spiel, d2=d2*factor+spiel, h=h, center=true, $fn=6*f);
     //            cylinder(d=dPinI*factor, h=h, center=true, $fn=6*f);
+        }
+    }
+
+
+    module PinF(factor=1, offset=0, spiel=0) {
+
+//#                                    translate([0,h,0]) cube([5,h*2,5], center=true);
+
+        rotate([0, 90, 0])
+            cylinder(d1=d1*factor+spiel, d2=d2*factor+spiel, h=h*2, center=true, $fn=6*f);
+
+        if (offset!=0) {
+            translate([0, offset, 0])
+            rotate([0, 90, 0])
+                 cylinder(d1=d1*factor+spiel, d2=d2*factor+spiel, h=h*2, center=true, $fn=6*f);
         }
     }
 }
