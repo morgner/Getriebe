@@ -34,7 +34,7 @@ a=90, steps=6, dPinWheel=30, dPin=4, hPin=5, dRoller=40,  diRoller=10, sample=fa
 
 */
 
-res=1;      // resolution of looped manipulation
+res=.5;      // resolution of looped manipulation
 f=13;        // resolution as factor for $f
 $fn=16*f;
 
@@ -65,26 +65,38 @@ module Roller(a=90, steps=6, dPinWheel=30, dPin=4, dPinI, hPin=5, dRoller=40,  d
     function factor(z) = z>1 ? 1+min((360/a-1)/2-abs((360/a-1)/2-z+1),.25) : 1;
 
     xcs=ds/2-ds/2*(1-cos(ustep));
-
-//H1();
-
-    rotate([90, 0, 0])
-        difference(){
-            color("red", .6)  cylinder(d=dd+.42, h=hd+.1, center=true, $fn=18*f);
-            color("gray") cylinder(d=dd, h=hd+.2, center=true, $fn=18*f);
+/*
+    difference() { 
+        union(){
+            rotate([90, 0, 0])
+            difference(){
+                color("red", .6) cylinder(d=dd+4.84, h=hd+.0, center=true, $fn=18*f);
+                color("gray",.6) cylinder(d=dd+2.42, h=hd+.1, center=true, $fn=18*f);
+                }
+            H1(); 
             }
+        K1();
+        }
+*/
+
     difference() { 
         H1(); 
-        K1(); }
+        K1();
+        }
+
+    intersection() { 
+        union(){
+            rotate([90, 0, 0])
+            difference(){
+                color("red", .6) cylinder(d=dd+.84, h=hd+.01, center=true, $fn=18*f);
+                color("gray",.6) cylinder(d=dd-.42, h=hd+.1, center=true, $fn=18*f);
+                }
+            }
+        K1();
+        }
     
     module H1(){
         rotate([90, 0, 0]){
-/*
-            difference(){
-                color("red")  cylinder(d=dd+4, h=hd+.1, center=true, $fn=18*f);
-                color("gray") cylinder(d=dd+1, h=hd+.2, center=true, $fn=18*f);
-                }
-*/
             difference(){
                 cylinder(d=dd, h=hd, center=true, $fn=18*f);
                 cylinder(d=di, h=hd+1, center=true, $fn=6);
@@ -94,8 +106,9 @@ module Roller(a=90, steps=6, dPinWheel=30, dPin=4, dPinI, hPin=5, dRoller=40,  d
         }
         
     module K1(){
-        for (rot=[0:res:360-res])
-            for (s=[180-0:ustep:180+360-ustep]) if ((s>490) || (s<200)) {
+//        res=9;
+        for (rot=[0:res:360-res]) 
+            for (s=[180-0:ustep:180+360-ustep]) if ((s>500) || (s<200)) {
                 z=rot/a;
                 w=ustep*uberfn(z); 
                 rotate([0, -rot, 0]) {
@@ -103,7 +116,8 @@ module Roller(a=90, steps=6, dPinWheel=30, dPin=4, dPinI, hPin=5, dRoller=40,  d
                         rotate([0, 0, s+w]) 
                             translate([ds/2, 0, 0])
                                 rotate([0, 90, 0]){
-                                    PinF(s==180 ? factor(z) : 1, z<1&&s==180 ? 2.5:0, spiel=0.3);
+//                                    PinF(s==180 ? factor(z) : 1, z<1&&s==180 ? 2.5:0, spiel=0.3);
+                                    PinF( 1, 0, 0.3);
 /*
 
         rotate([0, 90, 0])
